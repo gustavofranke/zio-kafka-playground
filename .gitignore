@@ -1,0 +1,7 @@
+.bsp/
+.idea/
+target
+.DS_Store
+
+.metals/
+ *.txt
