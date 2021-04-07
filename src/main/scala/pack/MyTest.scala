@@ -9,19 +9,20 @@ import zio.ZLayer
 import zio.kafka.consumer._
 import zio.kafka.serde._
 import zio.blocking.Blocking
-import zio.console.{Console, putStrLn}
+import zio.console.{Console, _}
 
 object MyTest {
 
   import MyConfig._
 
-  val consumerSettings: ConsumerSettings =
+  val consumerSettingsSticky: ConsumerSettings =
     ConsumerSettings(bootstrapServers)
-      .withGroupId("consumerGroup")
+      .withGroupId(consumerGroup)
       .withProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, partitionAssignor)
+      .withProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true)
 
   val consumerManaged: ZManaged[Clock with Blocking, Throwable, Consumer.Service] =
-    Consumer.make(consumerSettings)
+    Consumer.make(consumerSettingsSticky)
 
   val consumer: ZLayer[Clock with Blocking, Throwable, Consumer] =
     ZLayer.fromManaged(consumerManaged)
@@ -29,10 +30,11 @@ object MyTest {
   val data2 =
     Consumer.subscribeAnd(Subscription.topics(topic))
       .plainStream(Serde.string, Serde.string)
-      .tap(cr => putStrLn(s"offset: ${cr.record.offset()}, key: ${cr.record.key}, value: ${cr.record.value}, timestamp: ${java.time.Instant.ofEpochMilli(cr.record.timestamp)}"))
-      .map(_.offset)
-      .aggregateAsync(Consumer.offsetBatches)
-      .mapM(_.commit)
+//      .tap(cr => putStrLn(s"offset: ${cr.record.offset()}, key: ${cr.record.key}, value: ${cr.record.value}, timestamp: ${java.time.Instant.ofEpochMilli(cr.record.timestamp)}"))
+      .tap(cr => putStr("."))
+  //      .map(_.offset)
+//      .aggregateAsync(Consumer.offsetBatches)
+//      .mapM(_.commit)
 }
 
 object MyApp extends zio.App {

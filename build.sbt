@@ -8,5 +8,6 @@ scalaVersion := "2.11.8"
 //"dev.zio" %% "zio-kafka" % "0.14.0"
 libraryDependencies ++= Seq(
   "dev.zio" %% "zio-streams" % "1.0.2",
-  "dev.zio" %% "zio-kafka"   % "0.14.0"
+  "dev.zio" %% "zio-kafka" % "0.14.0",
+  "org.slf4j" % "slf4j-log4j12" % "2.0.0-alpha1"
 )
