@@ -16,9 +16,8 @@ assemblyMergeStrategy in assembly := {
   case PathList("META-INF", xs@_*) => xs map {
     _.toLowerCase
   } match {
-    case ("log4j-provider.properties" :: Nil) => MergeStrategy.first
+    case ("log4j.properties" :: Nil) => MergeStrategy.first
     case _ => MergeStrategy.discard
   }
-  case PathList("models", xs@_*) => MergeStrategy.discard
   case _ => MergeStrategy.first
 }

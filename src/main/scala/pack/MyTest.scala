@@ -19,7 +19,7 @@ object MyTest {
     ConsumerSettings(bootstrapServers)
       .withGroupId(consumerGroup)
       .withProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, partitionAssignor)
-      .withProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true)
+      .withProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true")
 
   val consumerManaged: ZManaged[Clock with Blocking, Throwable, Consumer.Service] =
     Consumer.make(consumerSettingsSticky)
@@ -31,10 +31,9 @@ object MyTest {
     Consumer.subscribeAnd(Subscription.topics(topic))
       .plainStream(Serde.string, Serde.string)
 //      .tap(cr => putStrLn(s"offset: ${cr.record.offset()}, key: ${cr.record.key}, value: ${cr.record.value}, timestamp: ${java.time.Instant.ofEpochMilli(cr.record.timestamp)}"))
-      .tap(cr => putStr("."))
-  //      .map(_.offset)
-//      .aggregateAsync(Consumer.offsetBatches)
-//      .mapM(_.commit)
+//      .tap(cr => putStr("."))
+      .tap(cr => putStr(s"${java.time.Instant.ofEpochMilli(cr.record.timestamp)}, "))
+
 }
 
 object MyApp extends zio.App {
