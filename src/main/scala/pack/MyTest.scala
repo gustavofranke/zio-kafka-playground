@@ -32,7 +32,7 @@ object MyTest {
       .plainStream(Serde.string, Serde.string)
 //      .tap(cr => putStrLn(s"offset: ${cr.record.offset()}, key: ${cr.record.key}, value: ${cr.record.value}, timestamp: ${java.time.Instant.ofEpochMilli(cr.record.timestamp)}"))
 //      .tap(cr => putStr("."))
-      .tap(cr => putStr(s"${java.time.Instant.ofEpochMilli(cr.record.timestamp)}, "))
+      .tap(cr => putStr(s"${cr.record.partition()} - ${java.time.Instant.ofEpochMilli(cr.record.timestamp)}, "))
 
 }
 
